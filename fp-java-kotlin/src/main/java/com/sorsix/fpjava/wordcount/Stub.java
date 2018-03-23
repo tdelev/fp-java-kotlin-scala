@@ -21,7 +21,7 @@ public class Stub implements WordCount {
 
     @Override
     public int count() {
-        return chars.isEmpty() ? 0 : 1;
+        return WordCount.unstub(chars);
     }
 
     public WordCount combineStab(Stub stub) {

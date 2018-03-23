@@ -21,7 +21,7 @@ public class Part implements WordCount {
 
     @Override
     public int count() {
-        return words + (left.isEmpty() ? 0 : 1) + (right.isEmpty() ? 0 : 1);
+        return WordCount.unstub(left) + words + WordCount.unstub(right);
     }
 
     public String getLeft() {
