@@ -65,6 +65,19 @@ public class Functions {
 
     static Function<Integer, String> square = compose(Functions::result, a -> a * a);
 
+    /**
+     * Iteration
+     */
+    static <A> A iterate(int from, int to, Function<Integer, A> action) {
+        A result = null;
+        if (from < to) {
+            result = action.apply(from);
+            iterate(from + 1, to, action);
+        }
+        return result;
+    }
+
+
     public static void main(String[] args) {
         System.out.println(sum(1, 2));
 
@@ -81,5 +94,10 @@ public class Functions {
         System.out.println(resultComposed.apply(15, 20));
 
         System.out.println(square.apply(10));
+
+        iterate(0, 50000, i -> {
+            System.out.println(i);
+            return i;
+        });
     }
 }

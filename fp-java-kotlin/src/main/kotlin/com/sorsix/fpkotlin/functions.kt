@@ -51,6 +51,17 @@ fun <A, B, C> compose(f: (B) -> C, g: (A) -> B): (A) -> C {
 
 val square = compose(::result, { a: Int -> a * a })
 
+/**
+ * Iteration
+ */
+
+/*tailrec*/ fun <A> iterate(from: Int, to: Int, action: (Int) -> A) {
+    if (from < to) {
+        action(from)
+        iterate(from + 1, to, action)
+    }
+}
+
 fun main(args: Array<String>) {
     println(sum(2, 3))
 
@@ -63,4 +74,6 @@ fun main(args: Array<String>) {
     println(sumF.curried()(10)(30))
 
     println(square(20))
+
+    iterate(0, 15000, { println(it) })
 }
