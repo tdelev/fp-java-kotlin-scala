@@ -8,6 +8,8 @@ fun sum(a: Int, b: Int) = a + b
 
 val sumF = ::sum
 
+fun mulFun(a: Int, b: Int, f: (Int, Int) -> Int): (Int) -> Int = { x: Int -> x * f(a, b) }
+
 /**
  * Partial applications
  */
@@ -55,7 +57,7 @@ val square = compose(::result, { a: Int -> a * a })
  * Iteration
  */
 
-/*tailrec*/ fun <A> iterate(from: Int, to: Int, action: (Int) -> A) {
+tailrec fun iterate(from: Int, to: Int, action: (Int) -> Unit) {
     if (from < to) {
         action(from)
         iterate(from + 1, to, action)

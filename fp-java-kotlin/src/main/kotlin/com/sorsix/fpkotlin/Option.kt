@@ -15,6 +15,11 @@ sealed class Option<out T> {
                 is Some -> f(this.value)
             }
 
+    override fun toString() = when (this) {
+        None -> "None"
+        is Some -> "Some($value)"
+    }
+
 }
 
 object None : Option<Nothing>()

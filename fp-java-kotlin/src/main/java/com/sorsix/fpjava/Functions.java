@@ -1,6 +1,7 @@
 package com.sorsix.fpjava;
 
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class Functions {
@@ -14,6 +15,10 @@ public class Functions {
     }
 
     static BiFunction<Integer, Integer, Integer> sumF = Functions::sum;
+
+    static Function<Integer, Integer> mulFun(int a, int b, BiFunction<Integer, Integer, Integer> bf) {
+        return x -> x * bf.apply(a, b);
+    }
 
     /**
      * Partial applications
@@ -68,13 +73,11 @@ public class Functions {
     /**
      * Iteration
      */
-    static <A> A iterate(int from, int to, Function<Integer, A> action) {
-        A result = null;
+    static void iterate(int from, int to, Consumer<Integer> action) {
         if (from < to) {
-            result = action.apply(from);
+            action.accept(from);
             iterate(from + 1, to, action);
         }
-        return result;
     }
 
 
@@ -95,9 +98,6 @@ public class Functions {
 
         System.out.println(square.apply(10));
 
-        iterate(0, 50000, i -> {
-            System.out.println(i);
-            return i;
-        });
+        iterate(0, 50000, System.out::println);
     }
 }
