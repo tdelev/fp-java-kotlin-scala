@@ -27,6 +27,15 @@ data class Some<out T>(val value: T) : Option<T>()
 
 fun <T> unit(a: T) = Some(a)
 
+fun <T> ofNullable(a: T?) = if (a == null) None else Some(a)
+
+fun <T> sequence(list: List<Option<T>>): Option<List<T>> =
+        if (list.isEmpty()) Some(listOf())
+        else {
+            val first = list.first()
+            first.flatMap { head -> sequence(if (list.size == 1) listOf() else list.subList(1, list.size)).map { listOf(head) + it } }
+        }
+
 fun <T> Option<T>.getOrElse(get: () -> T): T =
         when (this) {
             None -> get()
