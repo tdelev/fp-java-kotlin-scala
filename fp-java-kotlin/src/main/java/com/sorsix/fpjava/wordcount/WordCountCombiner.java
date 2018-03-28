@@ -8,6 +8,6 @@ public class WordCountCombiner implements Combiner<WordCount> {
 
     @Override
     public WordCount unit() {
-        return new Stub("");
+        return new WordSegment("");
     }
 }

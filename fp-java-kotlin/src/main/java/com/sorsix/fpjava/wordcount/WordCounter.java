@@ -5,8 +5,8 @@ import java.util.function.Function;
 public class WordCounter {
 
     private static final Function<Character, WordCount> mapper = c -> {
-        if (c == ' ') return new Part("", 0, "");
-        else return new Stub(c.toString());
+        if (c == ' ') return new Separator("", 0, "");
+        else return new WordSegment(c.toString());
     };
 
     public static WordCount count(String sentence) {
