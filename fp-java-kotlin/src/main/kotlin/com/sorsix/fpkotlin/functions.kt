@@ -64,6 +64,10 @@ tailrec fun iterate(from: Int, to: Int, action: (Int) -> Unit) {
     }
 }
 
+fun msgFun(a: Int, b: Int, f: (Int, Int) -> Int): (String) -> String =
+        { msg: String -> "$msg:${f(a, b)}" }
+
+
 fun main(args: Array<String>) {
     println(sum(2, 3))
 
@@ -76,6 +80,6 @@ fun main(args: Array<String>) {
     println(sumF.curried()(10)(30))
 
     println(square(20))
-
-    iterate(0, 15000, { println(it) })
+    println(msgFun(10, 20, sumF)("The sum is"))
+    //iterate(0, 15000, { println(it) })
 }
