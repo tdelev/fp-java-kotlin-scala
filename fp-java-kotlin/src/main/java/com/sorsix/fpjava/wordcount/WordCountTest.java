@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.IntStream;
@@ -22,7 +23,10 @@ public class WordCountTest {
         Function<String, FileStat> function = WordCountTest::pureFunctional;
 
         TimedResult<FileStat> result = Arrays.stream(args)
-                .flatMap(fileName -> IntStream.range(0, N).mapToObj(i -> timed(fileName, function)))
+                .flatMap(fileName -> IntStream.range(0, N)
+                        .peek(i -> System.out.printf("Iteration %d\n", i + 1))
+                        .mapToObj(i -> timed(fileName, function))
+                        .peek(System.out::println))
                 .reduce(new TimedResult<>(0L, FileStat.identity()),
                         (a, b) -> new TimedResult<>(a.time + b.time, a.result.add(b.result)));
 
@@ -104,6 +108,11 @@ public class WordCountTest {
         public T getResult() {
             return result;
         }
+
+        @Override
+        public String toString() {
+            return String.format("%d -> %s", time, result);
+        }
     }
 
     static class WcCounter implements Function<String, FileStat> {
@@ -122,4 +131,39 @@ public class WordCountTest {
         R result = function.apply(argument);
         return new TimedResult<>(System.nanoTime() - start, result);
     }
+
+    /**
+     * Solution using {@link Consumer< FileCounts >} function
+     */
+    private static String processWithConsumer(String fileName) throws IOException {
+        FileCounts fileCounts = new FileCounts();
+        Files.lines(Paths.get(fileName))
+                .forEach(fileCounts);
+        return fileCounts.toString();
+    }
+
+    static class FileCounts implements Consumer<String> {
+        long lines;
+        long chars;
+        long words;
+
+        public FileCounts() {
+            this.lines = 0;
+            this.chars = 0;
+            this.words = 0;
+        }
+
+        @Override
+        public void accept(String line) {
+            ++lines;
+            this.chars += line.length() + 1; // + the \n character
+            this.words += WORD.split(line).length;
+        }
+
+        @Override
+        public String toString() {
+            return String.format("%d %d %d", lines, words, chars);
+        }
+    }
+
 }
